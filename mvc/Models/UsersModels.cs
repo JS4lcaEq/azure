@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Collections.Generic;
+using System.Data;
 
 namespace mvc.Models
 {
@@ -26,38 +25,15 @@ namespace mvc.Models
 
         public static List<UsersModel> GetList()
         {
-            SqlConnection connection = new SqlConnection()
-            {
-                ConnectionString = @"Data Source=andvas.database.windows.net;Initial Catalog=start;Integrated Security=False;User ID=nAIlIAvMN6;Password=usiq2gdKm0;Connect Timeout=15;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
-
-            };
-
-
             List<UsersModel> list = new List<UsersModel>();
-            SqlCommand command = new SqlCommand(
-              "SELECT * FROM Users;",
-              connection);
-            connection.Open();
 
-            SqlDataReader reader = command.ExecuteReader();
+            DataTable table = App_Start.Db.GetTable("SELECT * FROM Parties");
 
-
-            if (reader.HasRows)
+            foreach (DataRow row in table.Rows)
             {
-                while (reader.Read())
-                {
-                    int id = reader.GetInt32(0);
-                    string name = reader.GetString(1);
-                    UsersModel item = new UsersModel(id, name);
-                    list.Add(item);
-                }
+                UsersModel item = new UsersModel((int)row["Id"], (string)row["Name"]);
+                list.Add(item);
             }
-            else
-            {
-                Console.WriteLine("No rows found.");
-            }
-            reader.Close();
-            connection.Close();
             return list;
         }
     }
