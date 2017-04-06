@@ -13,7 +13,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="css/font-awesome.min.css" rel="stylesheet" />
+    <link href="Content/font-awesome.min.css" rel="stylesheet" />
     <link href="style.css" rel="stylesheet" />
 
 
@@ -33,7 +33,34 @@
 
 <body ng-controller="MainCtrl as ctrl">
 
-    <nav class="navbar navbar navbar-fixed-top">
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Login</h4>
+                </div>
+                <div class="modal-body form-inline">
+                    <div id="loginForm" ng-hide="ctrl.usersService.getInfo().IsAuthenticated">
+                        Email:<input class="form-control" ng-model="ctrl.loginEmail" />
+                        Password:<input class="form-control" ng-model="ctrl.loginPassword" />
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ctrl.usersService.login(ctrl.loginEmail, ctrl.loginPassword)">Login</button>
+                    </div>
+                    <div id="logoutForm">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ctrl.usersService.logout()">Logout</button>
+                    </div>
+                </div>
+                <!--<div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                </div>-->
+            </div>
+        </div>
+    </div>
+
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color-: #ffffff; border-bottom: solid 1px #ccc;">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -42,53 +69,108 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">SheldonsShield</a>
+                <a class="navbar-brand" href="/#!/">SheldonsShield</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a>Films</a></li>
-                    <li><a>Partyes: Work</a></li>
-                    <li><a>Person: Sheldon</a></li>
+                    <li><a href="/#!/films">Films</a></li>
+                    <li><a href="/#!/parties">Partyes: Work</a></li>
+                    <li><a href="/#!/person">Person:{{ctrl.usersService.getInfo().User.NickName}}</a></li>
                 </ul>
+
             </div>
         </div>
     </nav>
 
 
 
-    <div class="container">
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Компания</th>
-                    <th>фильмов</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="item in [1,2,3,4,5]">
-                    <td>Компания</td>
-                    <td>{{item * 10}}</td>
-                </tr>
-            </tbody>
-        </table>          
+    <div class="container" style="margin-top: 50px;">
+        <!--<div class="row">
+            <button class="btn" ng-click="ctrl.usersService.dispose()">Reset User Info</button>
+            <button class="btn" ng-click="ctrl.usersService.getInfo()">Get User Info</button> = {{ctrl.usersService.getInfo()}}
+        </div>
         <hr />
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Рейтинг</th>
-                    <th>фильм</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="item in ctrl.films.getList()">
-                    <td>{{item}}</td>
-                    <td>{{item}}</td>
-                </tr>
-            </tbody>
-        </table>
-        ctrl.films.getList() = {{ctrl.films.getList()}}
-        <button ng-click="ctrl.films.getList()">reset</button>
+        <div class="row  form-inline">
+            <button class="btn" ng-click="ctrl.usersService.login(ctrl.loginName)">Login</button> as: {{ctrl.loginName}}
+            <input class="form-control" ng-model="ctrl.loginName" />
+        </div>-->
+        <hr />
+        <ng-view></ng-view>
+        <hr />
+        <p> &nbsp; </p><p> &nbsp; </p><p> &nbsp; </p><p> &nbsp; </p><p> &nbsp; </p><p> &nbsp; </p><p> &nbsp; </p><p> &nbsp; </p><p> &nbsp; </p><p> &nbsp; </p><p> &nbsp; </p><p> &nbsp; </p>
+
+
+        <div class="row form-inline">
+            Invite for email:
+            <input class="form-control" ng-model="ctrl.invitesEmail" />
+            <button class="btn btn-success" ng-click="ctrl.usersService.createInvite(ctrl.invite, ctrl.invitesEmail)">Create</button> "{{ctrl.invite}}"
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal">
+                Launch demo modal
+            </button>
+        </div>
+        <hr />
+        <div class="row form-inline">
+            Create user invite: <input class="form-control" ng-model="ctrl.cuInvite" />
+            email: <input class="form-control" ng-model="ctrl.cuEmail" />
+            password: <input class="form-control" ng-model="ctrl.cuPassword" />
+            nikName: <input class="form-control" ng-model="ctrl.cuNickName" />
+            <button class="btn btn-success" ng-click="ctrl.usersService.createUser(ctrl.cuInvite, ctrl.cuEmail, ctrl.cuPassword, ctrl.cuNickName)">Create</button>
+            <hr />
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#myModal">
+                Launch demo modal
+            </button>
+        </div>
+        <hr />
+        <div class="row">
+            <ul>
+                <li ng-repeat="item in ctrl.usersService.getInvitesList()">
+                    {{item.Id}} invite:"{{item.Invite}}" nick:"{{item.NickName}}" email:"{{item.EmailHash}}"
+                </li>
+            </ul>
+            
+        </div>
+        {{ctrl.userInfo}}
+        <!--<div class="row">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Компания</th>
+                        <th>фильмов</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in [1,2,3,4,5]">
+                        <td>Компания</td>
+                        <td>{{item * 10}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Рейтинг</th>
+                        <th>фильм</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in ctrl.films.getList()">
+                        <td>{{item}}</td>
+                        <td>{{item}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>-->
+
+
+        <pre>$location.path() = {{ctrl.$location.path()}}</pre>
+        <pre>$route.current.templateUrl = {{ctrl.$route.current.templateUrl}}</pre>
+        <pre>$route.current.params = {{ctrl.$route.current.params}}</pre>
+        <pre>$routeParams = {{ctrl.$routeParams}}</pre>
+        
+        
         <hr />
 
         <footer>
@@ -108,8 +190,11 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <!--<script src="/assets/js/ie10-viewport-bug-workaround.js"></script>-->
     <script src="scripts/angular.min.js"></script>
+    <script src="Scripts/angular-route.min.js"></script>
     <script src="app/filmsService.js"></script>
+    <script src="app/usersService.js"></script>
     <script src="app/app.js"></script>
+    <script src="app/router.js"></script>
     <script>angular.bootstrap("html", ['app']);</script>
 </body>
 </html>

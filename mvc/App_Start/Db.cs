@@ -1,16 +1,20 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using System.Web.Configuration;
 
 namespace mvc.App_Start
 {
     public class Db
     {
+
+
+        private static string ConnectionString = WebConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+
+
+
         public static DataTable GetTable(string sql)
         {
-            SqlConnection connection = new SqlConnection()
-            {
-                ConnectionString = @"Data Source=andvas.database.windows.net;Initial Catalog=start;Integrated Security=False;User ID=nAIlIAvMN6;Password=usiq2gdKm0;Connect Timeout=15;Encrypt=True;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
-            };
+            SqlConnection connection = GetConnection();
 
             SqlDataAdapter adapter = new SqlDataAdapter(sql, connection);
 
@@ -20,5 +24,43 @@ namespace mvc.App_Start
             return table;
         }
 
+        public static SqlConnection GetConnection()
+        {
+
+            SqlConnection connection = new SqlConnection()
+            {
+                ConnectionString = ConnectionString
+            };
+
+            return connection;
+        }
+
+        public static int Execute(SqlCommand command)
+        {
+            SqlConnection connection = GetConnection();
+
+            command.Connection = connection;
+
+            connection.Open();
+            int rowsCount = command.ExecuteNonQuery();
+            connection.Close();
+            return rowsCount;
+        }
+
+        public static int Execute(string sql)
+        {
+            var t = WebConfigurationManager.ConnectionStrings["DefaultConnection"];
+
+            SqlConnection connection = GetConnection();
+
+            SqlCommand command = new SqlCommand(sql, connection);
+            connection.Open();
+            int rowsCount = command.ExecuteNonQuery();
+            connection.Close();
+            return rowsCount;
+        }
+
     }
+
+
 }

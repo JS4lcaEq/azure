@@ -13,10 +13,10 @@
                 $.getJSON("/app/store/films.json", function (data) {
                     films = null;
                     films = data;
-                    console.log("load ", films);
+                    //console.log("load ", films);
                 });
             }
-            console.log("return ", films);
+            //console.log("return ", films);
             return films;
         };
 

@@ -1,0 +1,59 @@
+﻿<h2>Person</h2>
+
+<table class="table"  ng-hide="!ctrl.usersService.getInfo().IsAuthenticated">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>NickName</td>
+            <td>{{ctrl.usersService.getInfo().User.NickName}}</td>
+        </tr>
+        <tr>
+            <td>Parties</td>
+            <td>10</td>
+        </tr>
+        <tr>
+            <td>Films</td>
+            <td>10</td>
+        </tr>
+        <tr>
+            <td>Invaites</td>
+            <td>10</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ctrl.usersService.logout()">Logout</button></td>
+        </tr>
+        
+    </tbody>
+</table>
+
+<table class="table" ng-hide="ctrl.usersService.getInfo().IsAuthenticated">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Email</td>
+            <td><input class="form-control" ng-model="ctrl.loginEmail" /></td>
+        </tr>
+        <tr>
+            <td>Password</td>
+            <td><input class="form-control" ng-model="ctrl.loginPassword" /></td>
+        </tr>
+        <tr>
+            <td> </td>
+            <td> <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ctrl.usersService.login(ctrl.loginEmail, ctrl.loginPassword)">Login</button> </td>
+        </tr>
+    </tbody>
+</table>
+<hr />
+
+{{ctrl.usersService.getInfo()}}

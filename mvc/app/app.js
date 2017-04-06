@@ -1,6 +1,11 @@
 ﻿(function () {
 
-    function MainCtrl($scope, filmsService) {
+    function MainCtrl($scope, $route, $routeParams, $location, filmsService, usersService) {
+
+        this.$route = $route;
+        this.$location = $location;
+        this.$routeParams = $routeParams;
+
         var self = this;
         this.tmplt = "1 + 1 = {{1+ctrl.var}}";
         this.var = "VAR";
@@ -15,15 +20,22 @@
             }
         };
 
+        this.bussy = false;
+
         this.films = filmsService;
+        this.usersService = usersService;
 
+        this.userInfo = {info:null};
+        this.fillUserInfo = function () {
+            self.userInfo = self.usersService.getInfo(self.bussy);
+        };
 
-
+        this.invite = { invite: "invite" };
 
 
     }
 
-    angular.module('app', ['filmsModule']);
+    angular.module('app', ['ngRoute', 'filmsModule', 'usersModule']);
 
     angular.module('app').controller('MainCtrl', MainCtrl);
 

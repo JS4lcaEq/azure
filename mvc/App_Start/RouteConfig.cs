@@ -15,9 +15,13 @@ namespace mvc
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                url: "{controller}/{action}/{id}"
+                , defaults: new { id = UrlParameter.Optional }
             );
+
+            //Route newRoute = new Route("Index.html", new MvcRouteHandler());
+            //routes.Add(newRoute);
+
         }
     }
 }
